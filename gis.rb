@@ -1,12 +1,16 @@
 #!/usr/bin/env ruby
 
 class Track
+
+  attr_reader :segments, :segment_objects, :name
+
   def initialize(segments, name=nil)
     @name = name
     segment_objects = []
     segments.each do |s|
       segment_objects.append(TrackSegment.new(s))
     end
+
     # set segments to segment_objects
     @segments = segment_objects
   end
@@ -22,37 +26,51 @@ class Track
     j += '"geometry": {'
     j += '"type": "MultiLineString",'
     j +='"coordinates": ['
+
     # Loop through all the segment objects
     @segments.each_with_index do |s, index|
       if index > 0
         j += ","
       end
+
       j += '['
+
       # Loop through all the coordinates in the segment
       tsj = ''
       s.coordinates.each do |c|
+
         if tsj != ''
           tsj += ','
         end
+
         # Add the coordinate
         tsj += '['
         tsj += "#{c.lon},#{c.lat}"
+
         if c.ele != nil
           tsj += ",#{c.ele}"
         end
+
         tsj += ']'
       end
+
       j+=tsj
       j+=']'
     end
+
     j + ']}}'
   end
+
 end
+
 class TrackSegment
+
   attr_reader :coordinates
+
   def initialize(coordinates)
     @coordinates = coordinates
   end
+
 end
 
 class Point
@@ -64,11 +82,10 @@ class Point
     @lat = lat
     @ele = ele
   end
+
 end
 
 class Waypoint
-
-
 
 attr_reader :lat, :lon, :ele, :name, :type
 
@@ -85,33 +102,46 @@ attr_reader :lat, :lon, :ele, :name, :type
     # if name is not nil or type is not nil
     j += '"geometry": {"type": "Point","coordinates": '
     j += "[#{@lon},#{@lat}"
+
     if ele != nil
       j += ",#{@ele}"
     end
+
     j += ']},'
+
     if name != nil or type != nil
       j += '"properties": {'
+
       if name != nil
         j += '"title": "' + @name + '"'
       end
+
       if type != nil  # if type is not nil
+
         if name != nil
           j += ','
         end
+
         j += '"icon": "' + @type + '"'  # type is the icon
       end
+
       j += '}'
     end
+
     j += "}"
     return j
+
   end
+
 end
 
 class World
-def initialize(name, things)
-  @name = name
-  @features = things
-end
+
+  def initialize(name, things)
+    @name = name
+    @features = things
+  end
+
   def add_feature(f)
     @features.append(t)
   end
@@ -123,19 +153,25 @@ end
       if i != 0
         s +=","
       end
+
         if f.class == Track
             s += f.get_track_json
         elsif f.class == Waypoint
             s += f.get_waypoint_json
-      end
+        end
+
     end
+
     s + "]}"
   end
+
 end
 
 def main()
+
   w = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
   w2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
+  
   ts1 = [
   Point.new(-122, 45),
   Point.new(-122, 46),
