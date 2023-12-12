@@ -16,7 +16,7 @@ class Track
   end
 
   # Creates and return a JSON string
-  def get_track_json()
+  def to_json()
     json = '{' + '"type": "Feature", '
 
     if @name != nil
@@ -114,7 +114,7 @@ attr_reader :name, :type
     return @type
   end
 
-  def get_waypoint_json(indent=0)
+  def to_json(indent=0)
 
     json = '{"type": "Feature",' + '"geometry": {"type": "Point","coordinates": ' + "[#{@lon},#{@lat}"
 
@@ -175,9 +175,9 @@ class World
       end
 
         if f.class == Track
-            s += f.get_track_json
+            s += f.to_json
         elsif f.class == Waypoint
-            s += f.get_waypoint_json
+            s += f.to_json
         end
 
     end
