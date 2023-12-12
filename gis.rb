@@ -8,8 +8,8 @@ class Track
   def initialize(points, name=nil)
     @name = name
     segment_points = []
-    points.each do |point|
-      segment_points.append(TrackSegment.new(point))
+    points.each do |point_group|
+      segment_points.append(TrackSegment.new(point_group))
     end
 
     @points = segment_points
@@ -35,7 +35,7 @@ class Track
       end
 
       json += '['
-
+      
       # Loop through all the coordinates in the segment
       tsj = ''
       s.coordinates.each do |c|
@@ -46,10 +46,10 @@ class Track
 
         # Add the coordinate
         tsj += '['
-        tsj += "#{c.lon},#{c.lat}"
+        tsj += "#{c.get_lon()},#{c.get_lat()}"
 
         if c.elevation != nil
-          tsj += ",#{c.elevation}"
+          tsj += ",#{c.get_elevation()}"
         end
 
         tsj += ']'
@@ -84,6 +84,18 @@ class Point
     @lon = lon
     @lat = lat
     @elevation = elevation
+  end
+
+  def get_lat
+    return @lat
+  end
+
+  def get_lon
+    return @lon
+  end
+
+  def get_elevation
+    return @elevation
   end
 
 end
