@@ -137,6 +137,8 @@ end
 
 class World
 
+  attr_reader :name, :features
+
   def initialize(name, things)
     @name = name
     @features = things
@@ -171,7 +173,7 @@ def main()
 
   w = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
   w2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
-  
+
   ts1 = [
   Point.new(-122, 45),
   Point.new(-122, 46),
