@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# List of Track points
+# Assembles track JSON
 class Track
 
   attr_reader :points, :name
@@ -15,7 +15,7 @@ class Track
     @points = segment_points
   end
 
-
+  # Creates and return a JSON string
   def get_track_json()
     json = '{'
     json += '"type": "Feature", '
@@ -64,7 +64,7 @@ class Track
 
 end
 
-# list of latitude/longitude pairs with optional elevation
+# List of points
 class TrackSegment
 
   attr_reader :coordinates
@@ -75,7 +75,7 @@ class TrackSegment
 
 end
 
-# latitude/longitude pair with optional elevation
+# Latitude/longitude pair with optional elevation
 class Point
 
   attr_reader :lat, :lon, :elevation
@@ -100,7 +100,7 @@ class Point
 
 end
 
-# point of latitude/longitude pairs with optional elevation, name, and type
+# Point of latitude/longitude pairs with optional elevation, name, and type
 class Waypoint < Point
 
 attr_reader :lat, :lon, :elevation, :name, :type
@@ -159,7 +159,7 @@ attr_reader :lat, :lon, :elevation, :name, :type
 
 end
 
-# Contains waypoints and tracks
+# Contains waypoints and points
 class World
 
   attr_reader :name, :features
