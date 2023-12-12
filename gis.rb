@@ -101,14 +101,12 @@ class Point
 end
 
 # point of latitude/longitude pairs with optional elevation, name, and type
-class Waypoint
+class Waypoint >> Point
 
 attr_reader :lat, :lon, :elevation, :name, :type
 
   def initialize(lon, lat, elevation=nil, name=nil, type=nil)
-    @lat = lat
-    @lon = lon
-    @elevation = elevation
+    super(lon, lat, elevation)
     @name = name
     @type = type
   end
