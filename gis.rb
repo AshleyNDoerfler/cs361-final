@@ -17,24 +17,24 @@ class Track
 
 
   def get_track_json()
-    j = '{'
-    j += '"type": "Feature", '
+    json = '{'
+    json += '"type": "Feature", '
     if @name != nil
-      j+= '"properties": {'
-      j += '"title": "' + @name + '"'
-      j += '},'
+      json+= '"properties": {'
+      json += '"title": "' + @name + '"'
+      json += '},'
     end
-    j += '"geometry": {'
-    j += '"type": "MultiLineString",'
-    j += '"coordinates": ['
+    json += '"geometry": {'
+    json += '"type": "MultiLineString",'
+    json += '"coordinates": ['
 
     # Loop through all the segment objects
     @segments.each_with_index do |s, index|
       if index > 0
-        j += ","
+        json += ","
       end
 
-      j += '['
+      json += '['
 
       # Loop through all the coordinates in the segment
       tsj = ''
@@ -55,11 +55,11 @@ class Track
         tsj += ']'
       end
 
-      j+=tsj
-      j+=']'
+      json+=tsj
+      json+=']'
     end
 
-    j + ']}}'
+    json + ']}}'
   end
 
 end
@@ -103,39 +103,39 @@ attr_reader :lat, :lon, :elevation, :name, :type
 
   def get_waypoint_json(indent=0)
 
-    j = '{"type": "Feature",'
+    json = '{"type": "Feature",'
 
-    j += '"geometry": {"type": "Point","coordinates": '
-    j += "[#{@lon},#{@lat}"
+    json += '"geometry": {"type": "Point","coordinates": '
+    json += "[#{@lon},#{@lat}"
 
     if elevation != nil
-      j += ",#{@elevation}"
+      json += ",#{@elevation}"
     end
 
-    j += ']},'
+    json += ']},'
 
     # Add properties to the json if they exist
     if name != nil or type != nil
-      j += '"properties": {'
+      json += '"properties": {'
 
       if name != nil
-        j += '"title": "' + @name + '"'
+        json += '"title": "' + @name + '"'
       end
 
       if type != nil
 
         if name != nil
-          j += ','
+          json += ','
         end
 
-        j += '"icon": "' + @type + '"'
+        json += '"icon": "' + @type + '"'
       end
 
-      j += '}'
+      json += '}'
     end
 
-    j += "}"
-    return j
+    json += "}"
+    return json
 
   end
 
