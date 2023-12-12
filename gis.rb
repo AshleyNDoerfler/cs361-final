@@ -101,7 +101,7 @@ class Point
 end
 
 # point of latitude/longitude pairs with optional elevation, name, and type
-class Waypoint >> Point
+class Waypoint < Point
 
 attr_reader :lat, :lon, :elevation, :name, :type
 
@@ -109,6 +109,14 @@ attr_reader :lat, :lon, :elevation, :name, :type
     super(lon, lat, elevation)
     @name = name
     @type = type
+  end
+
+  def get_name
+    return @name
+  end
+
+  def get_type
+    return @type
   end
 
   def get_waypoint_json(indent=0)
