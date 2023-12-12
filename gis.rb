@@ -17,16 +17,13 @@ class Track
 
   # Creates and return a JSON string
   def get_track_json()
-    json = '{'
-    json += '"type": "Feature", '
+    json = '{' + '"type": "Feature", '
+
     if @name != nil
-      json+= '"properties": {'
-      json += '"title": "' + @name + '"'
-      json += '},'
+      json+= '"properties": {' + '"title": "' + @name + '"' + '},'
     end
-    json += '"geometry": {'
-    json += '"type": "MultiLineString",'
-    json += '"coordinates": ['
+
+    json += '"geometry": {' + '"type": "MultiLineString",' + '"coordinates": ['
 
     # Loop through all the segment objects
     @points.each_with_index do |s, index|
@@ -36,27 +33,25 @@ class Track
 
       json += '['
       
-      # Loop through all the coordinates in the segment
-      tsj = ''
+      # Loop through all the points in the segment
+      points = ''
       s.coordinates.each do |c|
 
-        if tsj != ''
-          tsj += ','
+        if points != ''
+          points += ','
         end
 
         # Add the coordinate
-        tsj += '['
-        tsj += "#{c.get_lon()},#{c.get_lat()}"
+        points += '[' + "#{c.get_lon()},#{c.get_lat()}"
 
         if c.elevation != nil
-          tsj += ",#{c.get_elevation()}"
+          points += ",#{c.get_elevation()}"
         end
 
-        tsj += ']'
+        points += ']'
       end
 
-      json+=tsj
-      json+=']'
+      json += points + ']'
     end
 
     json + ']}}'
@@ -103,7 +98,7 @@ end
 # Point of latitude/longitude pairs with optional elevation, name, and type
 class Waypoint < Point
 
-attr_reader :lat, :lon, :elevation, :name, :type
+attr_reader :name, :type
 
   def initialize(lon, lat, elevation=nil, name=nil, type=nil)
     super(lon, lat, elevation)
@@ -121,10 +116,7 @@ attr_reader :lat, :lon, :elevation, :name, :type
 
   def get_waypoint_json(indent=0)
 
-    json = '{"type": "Feature",'
-
-    json += '"geometry": {"type": "Point","coordinates": '
-    json += "[#{@lon},#{@lat}"
+    json = '{"type": "Feature",' + '"geometry": {"type": "Point","coordinates": ' + "[#{@lon},#{@lat}"
 
     if elevation != nil
       json += ",#{@elevation}"
