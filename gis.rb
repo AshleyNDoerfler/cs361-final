@@ -1,18 +1,18 @@
 #!/usr/bin/env ruby
 
-# List of Track segments
+# List of Track points
 class Track
 
-  attr_reader :segments, :segment_objects, :name
+  attr_reader :points, :name
 
-  def initialize(segments, name=nil)
+  def initialize(points, name=nil)
     @name = name
-    segment_objects = []
-    segments.each do |s|
-      segment_objects.append(TrackSegment.new(s))
+    segment_points = []
+    points.each do |point|
+      segment_points.append(TrackSegment.new(point))
     end
 
-    @segments = segment_objects
+    @points = segment_points
   end
 
 
@@ -29,7 +29,7 @@ class Track
     json += '"coordinates": ['
 
     # Loop through all the segment objects
-    @segments.each_with_index do |s, index|
+    @points.each_with_index do |s, index|
       if index > 0
         json += ","
       end
@@ -182,16 +182,15 @@ def main()
   waypoint_1 = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
   waypoint_2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
 
-  # Create track segments for the track
+  # Create track segments for tracks
   track_segment_1 = [
     Point.new(-122, 45),
     Point.new(-122, 46),
     Point.new(-121, 46),
   ]
-  track_segment_2 = [ 
-    Point.new(-121, 45), 
-    Point.new(-121, 46), 
-  ]
+
+  track_segment_2 = [ Point.new(-121, 45), Point.new(-121, 46), ]
+
   track_segment_3 = [
     Point.new(-121, 45.5),
     Point.new(-122, 45.5),
