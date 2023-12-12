@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+# List of Track segments
 class Track
 
   attr_reader :segments, :segment_objects, :name
@@ -11,9 +12,9 @@ class Track
       segment_objects.append(TrackSegment.new(s))
     end
 
-    # set segments to segment_objects
     @segments = segment_objects
   end
+
 
   def get_track_json()
     j = '{'
@@ -25,7 +26,7 @@ class Track
     end
     j += '"geometry": {'
     j += '"type": "MultiLineString",'
-    j +='"coordinates": ['
+    j += '"coordinates": ['
 
     # Loop through all the segment objects
     @segments.each_with_index do |s, index|
@@ -47,8 +48,8 @@ class Track
         tsj += '['
         tsj += "#{c.lon},#{c.lat}"
 
-        if c.ele != nil
-          tsj += ",#{c.ele}"
+        if c.elevation != nil
+          tsj += ",#{c.elevation}"
         end
 
         tsj += ']'
@@ -63,6 +64,7 @@ class Track
 
 end
 
+# list of latitude/longitude pairs with optional elevation
 class TrackSegment
 
   attr_reader :coordinates
@@ -73,42 +75,46 @@ class TrackSegment
 
 end
 
+# latitude/longitude pair with optional elevation
 class Point
 
-  attr_reader :lat, :lon, :ele
+  attr_reader :lat, :lon, :elevation
 
-  def initialize(lon, lat, ele=nil)
+  def initialize(lon, lat, elevation=nil)
     @lon = lon
     @lat = lat
-    @ele = ele
+    @elevation = elevation
   end
 
 end
 
+# point of latitude/longitude pairs with optional elevation, name, and type
 class Waypoint
 
-attr_reader :lat, :lon, :ele, :name, :type
+attr_reader :lat, :lon, :elevation, :name, :type
 
-  def initialize(lon, lat, ele=nil, name=nil, type=nil)
+  def initialize(lon, lat, elevation=nil, name=nil, type=nil)
     @lat = lat
     @lon = lon
-    @ele = ele
+    @elevation = elevation
     @name = name
     @type = type
   end
 
   def get_waypoint_json(indent=0)
+
     j = '{"type": "Feature",'
-    # if name is not nil or type is not nil
+
     j += '"geometry": {"type": "Point","coordinates": '
     j += "[#{@lon},#{@lat}"
 
-    if ele != nil
-      j += ",#{@ele}"
+    if elevation != nil
+      j += ",#{@elevation}"
     end
 
     j += ']},'
 
+    # Add properties to the json if they exist
     if name != nil or type != nil
       j += '"properties": {'
 
@@ -116,13 +122,13 @@ attr_reader :lat, :lon, :ele, :name, :type
         j += '"title": "' + @name + '"'
       end
 
-      if type != nil  # if type is not nil
+      if type != nil
 
         if name != nil
           j += ','
         end
 
-        j += '"icon": "' + @type + '"'  # type is the icon
+        j += '"icon": "' + @type + '"'
       end
 
       j += '}'
@@ -135,6 +141,7 @@ attr_reader :lat, :lon, :ele, :name, :type
 
 end
 
+# Contains waypoints and tracks
 class World
 
   attr_reader :name, :features
@@ -148,8 +155,9 @@ class World
     @features.append(t)
   end
 
+  # Creates and return a GeoJSON string
   def to_geojson(indent=0)
-    # Write stuff
+
     s = '{"type": "FeatureCollection","features": ['
     @features.each_with_index do |f,i|
       if i != 0
